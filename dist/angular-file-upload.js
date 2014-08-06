@@ -39,7 +39,7 @@ angularFileUpload.service('$upload', ['$http', '$q', '$timeout', function($http,
 		}
 
 		$http(config).then(function(r){deferred.resolve(r)}, function(e){deferred.reject(e)}, function(n){deferred.notify(n)});
-		
+
 		var promise = deferred.promise;
 		promise.success = function(fn) {
 			promise.then(function(response) {
@@ -78,7 +78,7 @@ angularFileUpload.service('$upload', ['$http', '$q', '$timeout', function($http,
 			})(config.xhrFn);
 			return promise;
 		};
-		
+
 		return promise;
 	}
 
@@ -120,7 +120,7 @@ angularFileUpload.service('$upload', ['$http', '$q', '$timeout', function($http,
 				if (Object.prototype.toString.call(config.file) === '[object Array]') {
 					var isFileFormNameString = Object.prototype.toString.call(fileFormName) === '[object String]';
 					for (var i = 0; i < config.file.length; i++) {
-						formData.append(isFileFormNameString ? fileFormName : fileFormName[i], config.file[i], 
+						formData.append(isFileFormNameString ? fileFormName : fileFormName[i], config.file[i],
 								(config.fileName && config.fileName[i]) || config.file[i].name);
 					}
 				} else {
@@ -213,8 +213,8 @@ angularFileUpload.directive('ngFileDrop', [ '$parse', '$timeout', '$location', f
 						dragOverClassFn = $parse(attr['ngFileDragOverClass']);
 						var dragOverClass = dragOverClassFn(scope, {
 							$event : evt
-						});					
-						elem[0].__drag_over_class_ = dragOverClass; 
+						});
+						elem[0].__drag_over_class_ = dragOverClass;
 					} else {
 						elem[0].__drag_over_class_ = attr['ngFileDragOverClass'] || "dragover";
 					}
@@ -241,36 +241,24 @@ angularFileUpload.directive('ngFileDrop', [ '$parse', '$timeout', '$location', f
 					fn(scope, {
 						$files : files,
 						$event : evt
-					});					
+					});
 				});
 			}, false);
-						
+
 			function isASCII(str) {
 				return /^[\000-\177]*$/.test(str);
 			}
 
 			function extractFiles(evt, callback) {
-				var files = [], items = evt.dataTransfer.items;
-				if (items && items.length > 0 && items[0].webkitGetAsEntry && $location.protocol() != 'file') {
-					for (var i = 0; i < items.length; i++) {
-						var entry = items[i].webkitGetAsEntry();
-						if (entry != null) {
-							//fix for chrome bug https://code.google.com/p/chromium/issues/detail?id=149735
-							if (isASCII(entry.name)) {
-								traverseFileTree(files, entry);
-							} else if (!items[i].webkitGetAsEntry().isDirectory) {
-								files.push(items[i].getAsFile());
-							}
-						}
-					}
-				} else {
-					var fileList = evt.dataTransfer.files;
-					if (fileList != null) {
-						for (var i = 0; i < fileList.length; i++) {
-							files.push(fileList.item(i));
-						}
+
+				var files = [];
+				var fileList = evt.dataTransfer.files;
+				if (fileList != null) {
+					for (var i = 0; i < fileList.length; i++) {
+						files.push(fileList.item(i));
 					}
 				}
+
 				(function waitForProcess(delay) {
 					$timeout(function() {
 						if (!processing) {
@@ -281,7 +269,7 @@ angularFileUpload.directive('ngFileDrop', [ '$parse', '$timeout', '$location', f
 					}, delay || 0)
 				})();
 			}
-			
+
 			var processing = 0;
 			function traverseFileTree(files, entry, path) {
 				if (entry != null) {
